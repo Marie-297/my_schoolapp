@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id         String   @id @default(uuid())
+  username   String @unique
+}
+
+model Student {
+  id         String   @id @default(uuid())
+  username   String @unique @db.VarChar(20)
+  name       String
+  surname    String
+  sex        Gender
+  address    String
+  img        String?
+  parentId   String
+  subjects   Subject[]
+  createdAt  DateTime @default(now())
+  parent     Parent   @relation(fields: [parentId], references: [id])
+  classId    Int
+  class      Class    @relation(fields: [classId], references: [id])
+  gradeId    Int
+  grade      Grade  @relation(fields: [gradeId], references: [id])
+  attendance Attendance[]
+  results     Result[]
+}
+
+model Teacher {
+  id         String   @id @default(uuid())
+  username   String @unique @db.VarChar(20)
+  sex        Gender
+  name       String
+  surname    String
+  phone      String
+  email     String? @unique
+  address    String @unique
+  img        String?
+  createdAt  DateTime @default(now())
+  subjects   Subject[]
+  lessons    Lesson[]
+  classes     Class[]
+}
+
+model Parent {
+  id         String   @id @default(uuid())
+  username   String @unique @db.VarChar(20)
+  name       String
+  surname    String
+  phone      String @unique
+  email      String? @unique
+  address    String
+  students   Student[]
+  createdAt DateTime @default(now())
+}
+
+model Subject {
+  id         Int   @id @default(autoincrement())
+  name       String @unique
+  teacherId  String
+  lessons     Lesson[]
+  teacher    Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  students   Student[]
+  exams      Exams[]
+  midterm    MidTerm[]
+  createdAt  DateTime @default(now())
+}
+
+model Lesson {
+  id         Int     @id @default(autoincrement())
+  name       String
+  subjectId  Int
+  dayOfWeek   Day
+  startTime   DateTime
+  endTime     DateTime
+  subject    Subject @relation(fields: [subjectId], references: [id])
+  classId    Int
+  class      Class  @relation(fields: [classId], references: [id])
+  teacherId  String
+  teacher    Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  attendance Attendance[]
+}
+
+model Class {
+  id         Int     @id @default(autoincrement())
+  name       String @unique
+  capacity    Int
+  lessons    Lesson[]
+  teacherId  String
+  classTeacher  Teacher @relation(fields: [teacherId], references: [id])
+  students   Student[]
+  gradeId    Int
+  grade      Grade  @relation(fields: [gradeId], references: [id])
+  events     Event[]
+  announcements Announcement[]
+}
+
+model Grade {
+  id         Int     @id @default(autoincrement())
+  level      Int @unique
+  students   Student[]
+  classes    Class[]
+}
+
+model Exams{
+  id         Int     @id @default(autoincrement())
+  title      String
+  subjectId  Int
+  subject    Subject @relation(fields: [subjectId], references: [id])
+  result     Result[]
+  startDate   DateTime
+  endDate     DateTime
+}
+
+model MidTerm {
+  id         Int     @id @default(autoincrement())
+  title      String
+  subjectId  Int
+  result     Result[]
+  subject    Subject @relation(fields: [subjectId], references: [id])
+  startDate   DateTime
+  endDate     DateTime
+}
+
+model Attendance{
+  id         Int     @id @default(autoincrement())
+  present    Boolean
+  studentId  String
+  student    Student @relation(fields: [studentId], references: [id])
+  lessonId   Int
+  lesson     Lesson @relation(fields: [lessonId], references: [id])
+}
+
+model Result {
+  id         Int     @id @default(autoincrement())
+  marks      Int
+  examId     Int?
+  exam       Exams? @relation(fields: [examId], references: [id])
+  midtermId  Int?
+  midterm    MidTerm? @relation(fields: [midtermId], references: [id])
+  studentId  String
+  student    Student @relation(fields: [studentId], references: [id])
+}
+
+model Announcement {
+  id         Int     @id @default(autoincrement())
+  title      String
+  description String
+  date        DateTime @default(now())
+  classId    Int
+  class      Class  @relation(fields: [classId], references: [id])
+}
+
+model Event {
+  id         Int     @id @default(autoincrement())
+  title      String
+  description String
+  startDate  DateTime
+  endDate    DateTime
+  classId    Int
+  class      Class  @relation(fields: [classId], references: [id])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Day {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+}
