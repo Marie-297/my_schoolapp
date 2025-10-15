@@ -25,7 +25,7 @@ type StudentSexData = {
 export default async function AdmindashboardPage({
   searchParams,
 }: {
-  searchParams?: { [keys: string]: string | undefined };
+  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const students = await prisma.student.findMany({
     select: {
