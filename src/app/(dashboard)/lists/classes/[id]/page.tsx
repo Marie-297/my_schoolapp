@@ -22,14 +22,14 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { GiTeamUpgrade } from "react-icons/gi";
 
 type ClassList = Class & { teacher: Teacher, student: Student, lesson: Lesson, subject: Subject}
-interface PageProps {
+interface SinglePageProps {
   params: { id: string };
   searchParams?: { [key: string]: string | undefined };
 }
 
 export default async function SingleClassPage({
  params,searchParams,
-}:  PageProps ) {
+}:  SinglePageProps ) {
   const { id } = params;
   const { page, ...queryParams } = searchParams || {};
   const user = await currentUser();
