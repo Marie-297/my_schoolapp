@@ -5,11 +5,9 @@ import prisma from '@/lib/prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 
-const MidtermPage = async ({
-  searchParams,
-}: {
-  searchParams: {[key:string]: string | undefined };
-}) => {
+export default async function MidtermPage ({
+ searchParams,
+}: { searchParams?: any }) {
   const user = await currentUser();
   console.log(user);
   const metadata = user?.publicMetadata;
@@ -44,5 +42,3 @@ const MidtermPage = async ({
     </div>
   )
 }
-
-export default MidtermPage

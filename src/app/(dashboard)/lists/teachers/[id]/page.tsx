@@ -15,11 +15,10 @@ import { HiDocumentReport } from "react-icons/hi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { RxAvatar } from "react-icons/rx";
 
-const SingleTeacherPage = async ({
-  params }: {
-  params: { id: string };
-}) => {
-  const { id } = await Promise.resolve(params);
+export default async function SingleTeacherPage  ({
+  searchParams,
+}: { searchParams?: any }) {
+  const teacherId = searchParams?.id as string;
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value;
@@ -29,7 +28,7 @@ const SingleTeacherPage = async ({
         _count: { subjects: number; lessons: number; classes: number };
       })
     | null = await prisma.teacher.findUnique({
-    where: { id },
+    where: { id: teacherId },
     include: {
       _count: {
         select: {
@@ -171,5 +170,3 @@ const SingleTeacherPage = async ({
     </div>
   );
 };
-
-export default SingleTeacherPage;

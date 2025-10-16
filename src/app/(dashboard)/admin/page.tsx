@@ -21,12 +21,9 @@ type StudentSexData = {
   boys: number;
   girls: number;
 };
-
-export default async function AdmindashboardPage({
+export default async function AdmindashboardPage({ 
   searchParams,
-}: {
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
+}: { searchParams?: any }) {
   const students = await prisma.student.findMany({
     select: {
       sex: true,

@@ -14,11 +14,9 @@ import Link from "next/link";
 
 type ClassList = Class & { classTeacher: Teacher, student: Student};
 
-const ClassListPage = async ({
+export default async function ClassListPage ({
   searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+}: { searchParams?: any }) {
 
 const user = await currentUser();
   console.log(user);
@@ -105,7 +103,8 @@ const renderRow = (item: ClassList & { _count: { students: number } }) => (
             query.classTeacherId = value;
             break;
           case "search":
-            query.name = { contains: value, mode: "insensitive" };
+            if (typeof value === "string") {
+            query.name = { contains: value, mode: "insensitive" };}
             break;
           case "grade":
             query.grade = {
@@ -189,5 +188,3 @@ const renderRow = (item: ClassList & { _count: { students: number } }) => (
     </div>
   );
 };
-
-export default ClassListPage;

@@ -14,11 +14,9 @@ import FilterSortControls from "@/components/others/FilterSortControl";
 
 type StudentList = Student & { class: Class, grade: Grade, parent: Parent};
 
-const StudentListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+export default async function StudentListPage ({
+   searchParams,
+}: { searchParams?: any }) {
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value; 
@@ -117,19 +115,24 @@ const StudentListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "teacherId":
+            if (typeof value === "string" && value.length > 0) {
             query.class = {
               lessons: {
                 some: {
                   teacherId: value,
                 },
               },
-            };
+            };}
             break;
           case "search":
-            query.name = { contains: value, mode: "insensitive" };
+            if (typeof value === "string") {
+            query.name = { contains: value, mode: "insensitive" };}
             break;
             case "grade":
-              query.grade = { level: parseInt(value, 10)};
+              const gradeNum = parseInt(value as string, 10);
+              if (!isNaN(gradeNum)) {
+                query.grade = { level: gradeNum };
+              }
               break; 
             case "sort":
               orderBy.name = value === "asc" ? "asc" : "desc"; 
@@ -183,5 +186,3 @@ const StudentListPage = async ({
     </div>
   );
 };
-
-export default StudentListPage;

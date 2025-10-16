@@ -14,11 +14,9 @@ import FilterSortControls from "@/components/others/FilterSortControl";
 
 type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[], };
 
-const TeacherListPage = async ({
+export default async function TeacherListPage ({
   searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+}: { searchParams?: any }) {
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value;
@@ -125,15 +123,17 @@ const TeacherListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "gradeId":
+             if (typeof value === "string" && value.length > 0) {
             query.classes = {
               some: {
                 grade: {
                   id: parseInt(value),
                 }
               },
-            };
+            }};
             break;
           case "search":
+            if (typeof value === "string") {
             query.OR = [
               { name: { contains: value, mode: "insensitive" } },
               { email: { contains: value, mode: "insensitive" } },
@@ -153,7 +153,7 @@ const TeacherListPage = async ({
                   },
                 },
               },
-            ];
+            ];}
             break;
             case "sort":
               orderBy.name = value === "asc" ? "asc" : "desc";
@@ -211,5 +211,3 @@ const TeacherListPage = async ({
     </div>
   );
 };
-
-export default TeacherListPage;

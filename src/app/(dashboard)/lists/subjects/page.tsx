@@ -11,11 +11,9 @@ import FilterSortControls from "@/components/others/FilterSortControl";
 
 type SubjectList = Subject & { teachers: Teacher[], subjects: Subject };
 
-const SubjectListPage = async ({
+export default async function SubjectListPage ({
   searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+}: { searchParams?: any }) {
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value; 
@@ -74,7 +72,8 @@ const SubjectListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "search":
-            query.name = { contains: value, mode: "insensitive" };
+            if (typeof value === "string") {
+            query.name = { contains: value, mode: "insensitive" };}
             break;
           case "sort":
             orderBy.name = value === "asc"? "asc" : "desc";
@@ -124,5 +123,3 @@ const SubjectListPage = async ({
     </div>
   );
 };
-
-export default SubjectListPage;

@@ -18,11 +18,9 @@ import TimetablePage from "@/components/others/Timetable";
 import SchoolLama from "@/components/others/SchoolLama";
 import Link from "next/link";
 
-const StudentPage = async ({
-  params: { id },
-}: {
-  params: { id: string };
-}) => {
+export default async function StudentPage ({
+  searchParams,
+}: { searchParams?: any }) {
   const user = await currentUser();
   const currentUserId = user?.id;
 
@@ -208,5 +206,3 @@ const StudentPage = async ({
     </div>
   );
 };
-
-export default StudentPage;

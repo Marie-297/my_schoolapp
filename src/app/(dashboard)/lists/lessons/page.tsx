@@ -14,11 +14,9 @@ type LessonList = Lesson & { subject: Subject } & { class: Class } & {
 };
 
 
-const LessonListPage = async ({
+export default async function LessonListPage ({
   searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+}: { searchParams?: any }) {
 
   const user = await currentUser();
   const metadata = user?.publicMetadata;
@@ -101,17 +99,22 @@ const renderRow = (item: LessonList) => (
       if (value !== undefined) {
         switch (key) {
           case "classId":
-            query.classId = parseInt(value);
+            const classId = parseInt(value as string);
+            if (!isNaN(classId)) query.classId = classId;
             break;
           case "teacherId":
-            query.teacherId = value;
+            if (typeof value === "string" && value.trim() !== "") {
+              query.teacherId = value;
+            }
             break;
           case "search":
+          if (typeof value === "string" && value.trim() !== "") {
             query.OR = [
               { subject: { name: { contains: value, mode: "insensitive" } } },
               { teacher: { name: { contains: value, mode: "insensitive" } } },
             ];
-            break;
+          }
+          break;
           default:
             break;
         }
@@ -157,5 +160,3 @@ const renderRow = (item: LessonList) => (
     </div>
   );
 };
-
-export default LessonListPage;

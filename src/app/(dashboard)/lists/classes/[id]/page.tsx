@@ -1,10 +1,6 @@
-import Announcements from "@/components/others/Announcement";
-import BigCalendarContainer from "@/components/others/CalendarContainer";
 import FormContainer from "@/components/others/FormContainer";
-import Performance from "@/components/others/Performance";
-import StudentAttendanceCard from "@/components/others/StudentAttendanceCard";
 import prisma from "@/lib/prisma";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { Class, Lesson, Prisma, Student, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,11 +24,14 @@ import { GiTeamUpgrade } from "react-icons/gi";
 type ClassList = Class & { teacher: Teacher, student: Student, lesson: Lesson, subject: Subject}
 interface PageProps {
   params: { id: string };
-  searchParams: { [key: string]: string | undefined };
+  searchParams?: { [key: string]: string | undefined };
 }
 
-const SingleClassPage = async  ({ params, searchParams }: PageProps) => {
-  const { id } = await Promise.resolve(params);
+export default async function SingleClassPage({
+ params,searchParams,
+}:  PageProps ) {
+  const { id } = params;
+  const { page, ...queryParams } = searchParams || {};
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value; 
@@ -140,8 +139,6 @@ const SingleClassPage = async  ({ params, searchParams }: PageProps) => {
       </tr>
     );
   
-    const { page, ...queryParams } = await searchParams;
-  
     const p = page ? parseInt(page) : 1;
   
     // URL PARAMS CONDITION
@@ -156,19 +153,22 @@ const SingleClassPage = async  ({ params, searchParams }: PageProps) => {
         if (value !== undefined) {
           switch (key) {
             case "teacherId":
+              if (typeof value === "string" && value.length > 0) {
               query.class = {
                 lessons: {
                   some: {
                     teacherId: value,
                   },
                 },
-              };
+              }};
               break;
             case "search":
-              query.name = { contains: value, mode: "insensitive" };
+              if (typeof value === "string" && value.length > 0) {
+              query.name = { contains: value, mode: "insensitive" }};
               break;
               case "grade":
-                query.grade = { level: parseInt(value, 10)};
+                if (typeof value === "string" && value.length > 0) {
+                query.grade = { level: parseInt(value, 10)}};
                 break; 
               case "sort":
                 orderBy.name = value === "asc" ? "asc" : "desc"; 
@@ -356,5 +356,3 @@ const SingleClassPage = async  ({ params, searchParams }: PageProps) => {
     </>
   );
 };
-
-export default SingleClassPage;

@@ -11,11 +11,9 @@ import { currentUser } from "@clerk/nextjs/server";
 
 type EventList = Event & { classes: Class[] };
 
-const EventListPage = async ({
+export default async function EventListPage ({
   searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+}: { searchParams?: any }) {
 
   const user = await currentUser();
   const currentUserId = user?.id;
@@ -107,7 +105,8 @@ const EventListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "search":
-            query.title = { contains: value, mode: "insensitive" };
+            if (typeof value === "string") {
+            query.title = { contains: value, mode: "insensitive" };}
             break;
           default:
             break;
@@ -168,5 +167,3 @@ const EventListPage = async ({
     </div>
   );
 };
-
-export default EventListPage;

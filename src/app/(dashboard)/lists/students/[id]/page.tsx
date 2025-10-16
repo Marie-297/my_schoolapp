@@ -18,21 +18,20 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { GiTeamUpgrade } from "react-icons/gi";
 import { MdSettingsBackupRestore, MdPlayLesson } from "react-icons/md";
 
-const SingleStudentPage = async ({
-  params: { id },
-}: {
-  params: { id: string };
-}) => {
+export default async function SingleStudentPage ({
+ searchParams,
+}: { searchParams?: any }) {
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value; 
+  const studentId = searchParams?.id as string;
 
   const student:
     | (Student & {
         class: Class & { _count: { lessons: number } };
       })
     | null = await prisma.student.findUnique({
-    where: { id },
+    where: { id: studentId },
     include: {
       class: { include: { _count: { select: { lessons: true } } } },
     },
@@ -178,5 +177,3 @@ const SingleStudentPage = async ({
     </div>
   );
 };
-
-export default SingleStudentPage;

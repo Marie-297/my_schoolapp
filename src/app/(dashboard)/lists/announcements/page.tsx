@@ -5,18 +5,15 @@ import TableSearch from "@/components/others/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Announcement, Class, Prisma } from "@prisma/client";
-import { auth } from "@clerk/nextjs/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { IoFilterCircle } from "react-icons/io5";
 import { FaSort } from "react-icons/fa";
 
 type AnnouncementList = Announcement & { class: Class };
 
-const AnnouncementListPage = async ({
+export default async function AnnouncementListPage({
   searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
+}: { searchParams?: any }) {
   
   const user = await currentUser();
   const currentUserId = user?.id;
@@ -70,8 +67,7 @@ const AnnouncementListPage = async ({
       </td>
     </tr>
   );
-  const { page, ...queryParams } = await searchParams;
-
+  const { page, ...queryParams } = searchParams || {};
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
@@ -80,10 +76,12 @@ const AnnouncementListPage = async ({
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
+      if (value !== undefined && value !== null) {
         switch (key) {
           case "search":
-            query.title = { contains: value, mode: "insensitive" };
+             if (typeof value === "string") {
+          query.title = { contains: value, mode: "insensitive" };
+        }
             break;
           default:
             break;
@@ -154,5 +152,3 @@ const AnnouncementListPage = async ({
     </div>
   );
 };
-
-export default AnnouncementListPage;
