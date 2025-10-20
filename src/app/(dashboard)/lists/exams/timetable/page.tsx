@@ -22,12 +22,9 @@ type ExamList = Exams & {
   };
 };
 
-const ExamTimetablePage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
-
+export default async function ExamTimetablePage ({
+ searchParams,
+}: { searchParams?: any }) {
 const user = await currentUser();
 const metadata = user?.publicMetadata;
 const role = metadata?.Value; 
@@ -148,9 +145,10 @@ const renderRow = (item: ExamList) => (
             }
             break;
           case "search":
+            if (typeof value === "string" && value.trim() !== "") {
             query.subject = {
               name: { contains: value, mode: "insensitive" },
-            };
+            }};
             break;
           default:
             break;
@@ -290,5 +288,3 @@ const renderRow = (item: ExamList) => (
     </div>
   );
 };
-
-export default ExamTimetablePage;

@@ -1,10 +1,11 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: any) {
+  const {id} = context.params as {id: string} 
   try {
     const body = await req.json();
-    const { id } = params;
+    // const { id } = params;
     return NextResponse.json({ message: `Student ${id} updated successfully`, data: body });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update student" }, { status: 500 });
@@ -14,10 +15,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
+  const {id} = context.params as {id: string}
   try {
-    const { id } = await params;
+    // const { id } = await params;
 
     if (!id) {
       return NextResponse.json(

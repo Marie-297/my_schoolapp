@@ -356,3 +356,15 @@
 //     </>
 //   );
 // };
+
+import React from "react";
+
+const SingleClassPage = () => {
+  return (
+    <div>
+      <p>Single class page</p>
+    </div>
+  )
+}
+
+export default SingleClassPage;

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const classId = parseInt(params.id); // Convert to integer
+    const { id } = await params; 
+    const classId = parseInt(id);
     if (isNaN(classId)) {
       return NextResponse.json({ error: "Invalid class ID" }, { status: 400 });
     }
@@ -27,9 +28,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const {id} = params; 
+    const { id } = await params; 
     if (!id) {
       return NextResponse.json({ error: "Class ID is required" }, { status: 400 });
     }

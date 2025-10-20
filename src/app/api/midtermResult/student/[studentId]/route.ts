@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: Request, context: any) {
+  const { studentId } = context.params as { studentId: string };
   try {
-    const { id } = params;
+    // const { studentId } = params;
 
     const results = await prisma.result.findMany({
-      where: { studentId: id },
+      where: { studentId},
       include: {
         student: {
           select: { name: true, surname: true },
@@ -24,7 +22,7 @@ export async function GET(
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error("❌ Error fetching student results:", error);
+    console.error("Error fetching student results:", error);
     return NextResponse.json(
       { error: "Failed to fetch results" },
       { status: 500 }
