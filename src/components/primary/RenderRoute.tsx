@@ -56,14 +56,14 @@ export function RenderRoutes({ routes, onSelectPage }: Props) {
   return (
     <>
       {routes.map((route, index) => {
-        const isActive = pathname.startsWith(route.url);
+        const isActive = pathname.includes(route.url);
         return (
           <Link
             href={route.url}
             key={index}
             onClick={() => onSelectPage?.(route.title)}
-            className={`flex items-center gap-2 p-2 rounded-md transition-colors duration-200
-              ${isActive ? "bg-blue-500 text-white" : "hover:bg-gray-100 dark:hover:bg-gray-800"}`}
+            className={`flex items-center gap-2 p-2 rounded-md transition-all duration-200
+              ${isActive ? "bg-blue-500 text-white shadow-md" : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-white"}`}
           >
             <div className="px-1">
               {React.createElement(route.icon, {

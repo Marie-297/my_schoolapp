@@ -50,8 +50,8 @@ const CountChart = ({ boys, girls }: { boys: number; girls: number }) => {
         <RadialBarChart
           cx="50%"
           cy="50%"
-          innerRadius={isMobile ? "35%" : "40%"}
-          outerRadius={isMobile ? "130%" : "180%"}
+          innerRadius={isMobile ? "25%" : "40%"}
+          outerRadius={isMobile ? "100%" : "180%"}
           barSize={isMobile ? 20 : 50}
           data={data}
         >
@@ -59,8 +59,12 @@ const CountChart = ({ boys, girls }: { boys: number; girls: number }) => {
           <Legend
             iconType="circle"
             layout="vertical"
-            verticalAlign="top"
+            verticalAlign={isMobile ? "middle" : "top"}
             align="left"
+            wrapperStyle={{
+              fontSize: isMobile ? 12 : 16,
+              lineHeight: "20px",
+            }}
             payload={[
               { value: `Total: ${boys + girls}`, type: "circle", color: "gold" },
               { value:`Girls: ${girls}`, type: "circle", color: "purple" },

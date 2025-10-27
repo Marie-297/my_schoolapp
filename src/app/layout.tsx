@@ -1,12 +1,6 @@
 
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  ClerkLoaded,
-  ClerkLoading,
 } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -25,18 +19,6 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          {/* <ClerkLoading>
-            <div className='flex items-center justify-center h-screen text-2xl'>Loading...</div>
-          </ClerkLoading>
-          <ClerkLoaded>  
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-              {children}
-            </SignedIn>
-          </ClerkLoaded> */}
           {children}
         </body>
       </html>

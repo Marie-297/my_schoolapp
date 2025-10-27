@@ -28,17 +28,16 @@ const Navbar = () => {
   fetchRole();
 }, []);
 
-
   return (
-    <div className="flex items-center justify-between p-4 relative">
+    <div className="flex items-center justify-between px-4 py-2 md:py-4 relative">
       {/* searchbar */}
-      <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
+      <div className="hidden md:flex items-center gap-4 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
         <FaSearch size={20} />
         <input type="text" placeholder="Search" className="w-[150px] p-2 bg-transparent border-b-2 border-gray-400 outline-none" />
       </div>
 
       {/* ICONS/USER */}
-      <div className="flex items-center gap-10 justify-end">
+      <div className="flex items-center gap-2 md:gap-10 justify-end">
         <div className="bg-white rounded-full">
           <AiFillMessage size={20} />
         </div>
@@ -72,9 +71,9 @@ const Navbar = () => {
       </div>
       {/* Mobile toggle button */}
     <div className="md:hidden flex items-center">
-      <button title="menu" onClick={() => setOpen(!open)} className="p-2 rounded-full hover:bg-gray-100">
+      {/* <button title="menu" onClick={() => setOpen(!open)} className="p-2 rounded-full hover:bg-gray-100">
         <IoIosNotifications size={25} />
-      </button>
+      </button> */}
 
       {open && (
         <div className="absolute top-12 right-2 bg-white shadow-lg rounded-lg p-3 flex flex-col gap-3">

@@ -31,22 +31,22 @@ const StudentSexChart : React.FC<StudentSexProps> = ({ data, title }) => {
     <>
       {title && <h2 className="text-2xl font-extrabold mb-4">{title}</h2>}
       <ResponsiveContainer width="100%" height="90%">
-        <BarChart width={500} height={isMobile ? 300 : 500} data={sortedValidData} barSize={20}>
+        <BarChart width={500} height={isMobile ? 200 : 500} data={sortedValidData} barSize={20}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ddd" />
           <XAxis
             dataKey="gradeId"
             axisLine={false}
-            tick={{ fill: "black", fontSize: isMobile ?	16 : 10}}
+            tick={{ fill: "black", fontSize: isMobile ?	8 : 14}}
             tickLine={false}
           />
-          <YAxis axisLine={false} tick={{ fill: "black" }} tickLine={false} />
+          <YAxis axisLine={false} tick={{ fill: "black", fontSize: isMobile ?	12 : 16 }} tickLine={false} />
           <Tooltip
             contentStyle={{ borderRadius: "10px", borderColor: "darkgrey" }}
           />
           <Legend
             align="left"
             verticalAlign="top"
-            wrapperStyle={{ paddingTop: "20px", paddingBottom: "40px" }}
+            wrapperStyle={{ paddingTop: "20px", paddingBottom: "40px", fontSize: isMobile ? 14 : 18, }}
           />
           <Bar
             dataKey="boys"

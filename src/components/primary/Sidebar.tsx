@@ -1,13 +1,14 @@
 "use client"
 import * as React from "react";
 import { useUser } from "@clerk/nextjs";
-import { AdminRoutes, ParentRoutes, TeacherRoutes, StudentRoutes } from "./SidebarRouter";
+import { AdminRoutes, AdminMobileRoutes } from "./SidebarRouter";
 import { RenderRoutes } from "./RenderRoute";
 // import ToggleLight from "./ToggleLight";
 // import { User } from "@prisma/client";
 // import SignOut from "./SignOut";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaBars, FaEllipsisV } from "react-icons/fa";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 // type SideBarProps = {
 //   user: User;
@@ -18,29 +19,49 @@ type SideBarProps = {
 };
 
 const SideBar = ({ onSelectPage }: SideBarProps) => {
-  const { user } = useUser();
   const handlePageSelect = (page: string) => {
     if (onSelectPage) onSelectPage(page);
     setIsOpen(false); 
   };
-  const metadata = user?.publicMetadata;
-  const role = metadata?.value;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const adminIconsRouter = () => {
-    return <RenderRoutes routes={AdminRoutes} onSelectPage={onSelectPage} />;
+    return <RenderRoutes routes={AdminRoutes} onSelectPage={handlePageSelect} />;
   };
-
-  const parentIconsRouter = () => {
-    return <>{RenderRoutes({ routes: ParentRoutes })}</>;
-  };
-
-  const teacherIconsRouter = () => {
-    return <>{RenderRoutes({ routes: TeacherRoutes })}</>;
-  };
-
-  const studentIconsRouter = () => {
-    return <>{RenderRoutes({ routes: StudentRoutes })}</>;
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const renderRoutes = () => {
+    if (isMobile) {
+      return (
+        <Accordion type="single" collapsible className="w-full">
+          {AdminMobileRoutes.map((group) => (
+            <AccordionItem key={group.title} value={group.title}>
+              <AccordionTrigger>{group.title}</AccordionTrigger>
+              <AccordionContent>
+                {group.items.map((item) => (
+                  <button
+                    key={item.title}
+                    onClick={() => handlePageSelect(item.url)}
+                    className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <item.icon className="text-lg" />
+                    {item.title}
+                  </button>
+                ))}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      );
+    } else {
+      // 🖥️ Desktop routes (flat list)
+      return <RenderRoutes routes={AdminRoutes} onSelectPage={handlePageSelect} />;
+    }
   };
   return (
     <div>
@@ -58,10 +79,7 @@ const SideBar = ({ onSelectPage }: SideBarProps) => {
           {/* TOP PART  */}
           <div>
             <nav className="flex flex-col items-start px-2 mx-0 overflow-y-auto dark:text-white">
-            {/* {role === "teacher" && teacherIconsRouter()}
-            {role === "parent" && parentIconsRouter()}
-            {role === "student" && studentIconsRouter()} */}
-              {adminIconsRouter()}
+              {renderRoutes()}
             </nav>
           </div>
           {/* BOTTOM PART  */}

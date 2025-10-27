@@ -108,7 +108,9 @@ console.log(formattedStudentSex);
     typeof searchParams?.date === "string" ? searchParams.date : undefined;
   return (
     <>
-      <SchoolLama />
+      <div className="hidden md:block">
+        <SchoolLama />
+      </div>
       <div className="relative">
         {/* Register button */}
         <DropdownMenu>
@@ -128,30 +130,50 @@ console.log(formattedStudentSex);
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="p-4 flex gap-4 flex-col-reverse md:flex-row">
+      <div className="p-4 flex gap-4 flex-col md:flex-row">
       {/* LEFT */}
         <div className="w-full lg:w-2/3 flex flex-col gap-8">
           {/* USER CARDS */}
           <div className="flex flex-col lg:flex-row gap-8">
-            <CalendarEvent />
+            <div className="hidden lg:block">
+              <CalendarEvent />
+            </div>
+            <div className="block lg:hidden fixed top-[182px] right-4 z-50">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="rounded-lg shadow-lg p-3 bg-blue-600 text-white hover:bg-blue-700">
+                    View Calendar
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  align="end"
+                  className="w-[90vw] max-w-sm p-2 bg-white shadow-lg rounded-xl"
+                >
+                  <div className="max-h-[70vh] overflow-y-auto">
+                    <CalendarEvent />
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <div className="h-auto">
               <TeacherCountChart male={males} female={females} />
             </div>
           </div>
-          <div className="flex gap-4 justify-between flex-wrap">
+          <div className="flex lg:gap-4 gap-2 justify-between flex-wrap">
             <UserBox type="admin" />
             <UserBox type="teacher" />
             <UserBox type="student" />
             <UserBox type="parent" />
           </div>
           {/* MIDDLE CHARTS */}
-          <div className="flex gap-4 flex-col lg:flex-row lg:h-600px h-250px">
+          <div className="flex lg:gap-4 gap-2 flex-col lg:flex-row lg:h-600px h-200px">
             {/* COUNT CHART */}
-            <div className="w-full lg:w-1/3 lg:h-[450px] h-[250px]">
+            <div className="w-full lg:w-1/3 lg:h-[450px] h-[200px]">
               <CountChartContainer boys={boys} girls={girls} />
             </div>
             {/* ATTENDANCE CHART */}
-            <div className="w-full lg:w-2/3 h-[450px]">
+            <div className="w-full lg:w-2/3 h-[270px]">
               {/* <Attendance 
                data={formattedAttendanceData}
                title="Student Attendance Overview" 
@@ -168,7 +190,7 @@ console.log(formattedStudentSex);
               title="Student Gender Chart"
             />
           </div>
-          <div className="w-full h-[500px]">
+          <div className="w-full lg:h-[500px] h-[320px]">
             <FinanceChart />
           </div>
         </div>

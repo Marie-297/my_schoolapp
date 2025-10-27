@@ -43,43 +43,44 @@ const FinanceChart = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-extrabold">Finance</h1>
       </div>
-      <ResponsiveContainer width="100%" height="90%">
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: isMobile ? 30: 0,
-            left: isMobile ? 70: 30,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
-          <XAxis
-            dataKey="name"
-            axisLine={false}
-            tick={{ fill: "#d1d5db" }}
-            tickLine={false}
-            tickMargin={10}
-            angle={-45}
-          />
-          <YAxis axisLine={false} tick={{ fill: "#d1d5db", fontSize:"14px"}} tickLine={false}  tickMargin={20} tickFormatter={(value) => `GH₵${formatNumber(value)}`} />
-          <Tooltip formatter={(value) => `GH₵${value}`} />
-          <Legend
-            align="center"
-            verticalAlign="top"
-            wrapperStyle={{ paddingTop: "10px", paddingBottom: "30px" }}
-          />
-          <Line
-            type="monotone"
-            dataKey="income"
-            stroke="blue"
-            strokeWidth={5}
-          />
-          <Line type="monotone" dataKey="expense" stroke="darkred" strokeWidth={5}/>
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[300px] lg:h-[400px]">
+        <ResponsiveContainer width="95%" height="90%">
+          <LineChart
+            data={data}
+            margin={{
+              top: 5,
+              right: isMobile ? 15: 10,
+              left: isMobile ? 15: 40,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+            <XAxis
+              dataKey="name"
+              interval={0}
+              axisLine={false}
+              tick={{ fill: "#d1d5db", fontSize:isMobile ? 10 : 14 }}
+              tickLine={false}
+              tickMargin={10}
+              angle={-45}
+            />
+            <YAxis axisLine={false} tick={{ fill: "#d1d5db", fontSize:isMobile ? 10 : 14}} tickLine={false}  tickMargin={20} tickFormatter={(value) => `GH₵${formatNumber(value)}`} />
+            <Tooltip formatter={(value) => `GH₵${value}`} />
+            <Legend
+              align="center"
+              verticalAlign="top"
+              wrapperStyle={{ paddingTop: "10px", paddingBottom: "30px", fontSize: isMobile ? 14 : 18, }}
+            />
+            <Line
+              type="monotone"
+              dataKey="income"
+              stroke="blue"
+              strokeWidth={isMobile ? 2 : 5}
+            />
+            <Line type="monotone" dataKey="expense" stroke="darkred" strokeWidth={isMobile ? 2 : 5}/>
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

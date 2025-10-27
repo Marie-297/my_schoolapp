@@ -37,9 +37,9 @@ const GradeCountChart = ({ grades }: { grades: { gradeId: string; studentCount: 
             data={sortedGrades}
             dataKey="studentCount"
             nameKey="gradeId"
-            cx="50%"
-            cy="50%"
-            outerRadius={120}
+            cx={isMobile ? "45%" : "50%"}
+            cy={isMobile ? "30%" : "50%"}
+            outerRadius={isMobile ? 80 : 120}
             fill="#8884d8"
             label={(entry) => `${entry.studentCount}`}
             labelLine={false}
@@ -49,7 +49,11 @@ const GradeCountChart = ({ grades }: { grades: { gradeId: string; studentCount: 
             ))}
           </Pie>
           <Tooltip />
-          <Legend layout={isMobile ? "horizontal" : "vertical"} align="left" verticalAlign="top" />
+          <Legend layout="vertical" align="left" verticalAlign="top" 
+          wrapperStyle={{
+            fontSize: isMobile ? 14 : 18,
+            lineHeight: "22px",
+          }}/>
         </PieChart>
       </ResponsiveContainer>
     </div>

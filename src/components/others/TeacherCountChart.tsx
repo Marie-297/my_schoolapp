@@ -40,13 +40,15 @@ const TeacherCountChart = ({ male, female }: { male: number; female: number }) =
   }, []);
   return (
     <div className="relative w-full lg:h-[400px] h-[150px] bg-blue-300 px-8 py-4 rounded-lg">
-      <h1 className="font-extrabold text-2xl">Teachers Count Chart</h1>
+      <h1 className={`font-extrabold text-center ${
+          isMobile ? "text-lg mb-1" : "text-2xl mb-4"
+        }`}>Teachers Count Chart</h1>
       <ResponsiveContainer >
         <RadialBarChart
           cx="50%"
-          cy="50%"
-          innerRadius={isMobile ? "35%" : "40%"}
-          outerRadius={isMobile ? "120%" : "180%"}
+          cy={isMobile ? "40%" : "50%"}
+          innerRadius={isMobile ? "25%" : "35%"}
+          outerRadius={isMobile ? "100%" : "150%"}
           barSize={isMobile ? 20 : 50}
           data={data}
         >
@@ -56,6 +58,10 @@ const TeacherCountChart = ({ male, female }: { male: number; female: number }) =
             layout="vertical"
             verticalAlign="top"
             align="left"
+            wrapperStyle={{
+              fontSize: isMobile ? 12 : 16,
+              lineHeight: "20px",
+            }}
             payload={[
               { value: `Total: ${male + female}`, type: "circle", color: "orange" },
               { value:`Female: ${female}`, type: "circle", color: "purple" },
@@ -68,8 +74,8 @@ const TeacherCountChart = ({ male, female }: { male: number; female: number }) =
         </RadialBarChart>
       </ResponsiveContainer>
       <BiMaleFemale
-        size={30}
-        className="absolute top-[70%] lg:top-[57%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-black text-white rounded-full"
+        size={isMobile ? 15 : 30}
+        className="absolute top-[63%] lg:top-[57%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-black text-white rounded-full"
       />
     </div>
   );

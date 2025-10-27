@@ -18,8 +18,7 @@ export default function DashboardLayout({
   if (!isLoaded) return <div className="p-10">Loading...</div>;
 
   const metadata = user?.publicMetadata;
-  const role = metadata?.Value; 
-  console.log("role of user: ", role)
+  const role = metadata?.Value;
 
   return (
     <div className="flex flex-col">
@@ -32,14 +31,16 @@ export default function DashboardLayout({
       <div className="flex">
          {role === "ADMIN" && (
           <div className="w-0 md:w-[10%] lg:w-[18%] xl:w-[15%] bg-white min-h-screen shadow-lg">
-            <SideBar onSelectPage={setPageTitle} />
+            <SideBar onSelectPage={(page) => setPageTitle(page)} />
           </div>
         )}
         {/* RIGHT */}
-        <div className={`w-full ${
+        <div className={`w-full mt-14 ${
             role === "ADMIN" ? "md:w-[94%] lg:w-[86%]" : "w-full"
-          } bg-white overflow-scroll flex flex-col pt-14`}>
-          <Navbar />
+          } bg-white overflow-scroll flex flex-col md:pt-20 pt-16`}>
+          <div className="fixed top-14 z-40 right-0 md:left-[18%] w-auto md:w-[82%] bg-transparent md:bg-white shadow-sm">
+            <Navbar />
+          </div>
           {/* Page title */}
           {role === "ADMIN" && (
             <div className="p-3 md:p-6 lg:p-4 rounded-lg uppercase border-b bg-blue-200 mb-2">
@@ -49,7 +50,6 @@ export default function DashboardLayout({
             </div>
           )}
           <div  className="lg:pl-8 clas pl-0 flex flex-col">
-            {/* <SchoolLama /> */}
             {children}
           </div>
         </div>
