@@ -16,9 +16,10 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { RxAvatar } from "react-icons/rx";
 
 export default async function SingleTeacherPage  ({
-  searchParams,
-}: { searchParams?: any }) {
-  const teacherId = searchParams?.id as string;
+  params,
+}: { params:  Promise<{ id: string }> }) {
+  const { id } = await params;
+  const teacherId = id;
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value;
@@ -48,9 +49,9 @@ export default async function SingleTeacherPage  ({
       {/* LEFT */}
       <div className="w-full xl:w-2/3">
         {/* TOP */}
-        <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-row gap-8 lg:gap-4 w-[100%]">
           {/* USER INFO CARD */}
-          <div className="bg-lamaSky py-6 px-4 rounded-md flex-1 flex gap-4">
+          <div className="bg-lamaSky py-6 px-4 rounded-md lg:flex-1 flex gap-4">
             <div className="w-1/3">
               {teacher.img ? (
                 <Image
@@ -58,14 +59,14 @@ export default async function SingleTeacherPage  ({
                   alt=""
                   width={120}
                   height={120}
-                  className="w-36 h-36 rounded-full object-cover"
+                  className="lg:w-36 lg:h-36 w-20 h-28 lg:rounded-full rounded-sm object-cover"
                 />) : (
                   <RxAvatar size={90} />
                 )}
             </div>
             <div className="w-2/3 flex flex-col gap-4">
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold">
+                <h1 className="lg:text-xl text-base font-semibold">
                   {teacher.name + " " + teacher.surname}
                 </h1>
                 {role === "ADMIN" && (
@@ -74,49 +75,49 @@ export default async function SingleTeacherPage  ({
               </div>
               <div className="flex flex-col gap-2 flex-wrap text-xs font-medium">
                 <div className="w-full md:w-1/3 lg:w-full flex items-center gap-2">
-                  <BsCalendarDateFill size={20} />
+                  <BsCalendarDateFill className="w-3 h-3 lg:w-6 lg:h-6" />
                   <span>
                     {new Intl.DateTimeFormat("en-GB").format(teacher.birthday)}
                   </span>
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full flex items-center gap-2">
-                  <IoMdMailUnread size={20} className="text-slate-950" />
+                  <IoMdMailUnread className="text-slate-950 w-3 h-3 lg:w-6 lg:h-6" />
                   <span>{teacher.email || "-"}</span>
                 </div>
                 <div className="w-full md:w-1/3 lg:w-full flex items-center gap-2">
-                  <MdContactPhone size={20} />
+                  <MdContactPhone className="w-3 h-3 lg:w-6 lg:h-6" />
                   <span>{teacher.phone || "-"}</span>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex-1 flex gap-4 justify-between flex-wrap">
+          <div className="lg:flex-1 lg:gap-4 lg:flex-wrap">
            
-            <div className="bg-white p-1 items-center rounded-md flex gap-4 w-full md:w-[48%]">
-              < HiDocumentReport size={30}/>
-              <div className="">
-                <h1 className="text-xl font-semibold">90%</h1>
-                <span className="text-sm text-gray-400">Attendance</span>
+            <div className="bg-white p-1 items-center rounded-md flex lg:gap-4 gap-2 md:w-[48%]">
+              < HiDocumentReport className="w-4 h-4 lg:w-8 lg:h-8"/>
+              <div className="flex flex-col lg:gap-2 gap-[2px]">
+                <h1 className="lg:text-xl text-base font-semibold">90%</h1>
+                <span className="lg:text-sm text-[10px] text-gray-400">Attendance</span>
               </div>
             </div>
             {/* CARD */}
-            <div className="bg-white items-center p-1 rounded-md flex gap-4 w-full md:w-[48%]">
-              <MdSubject size={30} />
-              <div className="">
-                <h1 className="text-xl font-semibold">
+            <div className="bg-white items-center p-1 rounded-md flex gap-2 lg:gap-4 w-full md:w-[48%]">
+              <MdSubject className="w-4 h-4 lg:w-8 lg:h-8" />
+              <div className="flex flex-col lg:gap-2 gap-[2px]">
+                <h1 className="lg:text-xl text-base font-semibold">
                   {teacher._count.subjects}
                 </h1>
-                <span className="text-sm text-gray-400">Subject(s)</span>
+                <span className="lg:text-sm text-[10px] text-gray-400">Subject(s)</span>
               </div>
             </div>
     
-            <div className="bg-white items-center p-1 rounded-md flex gap-4 w-full md:w-[48%]">
-              <SiGoogleclassroom size={30} />
-              <div className="">
-                <h1 className="text-xl font-semibold">
+            <div className="bg-white items-center p-1 rounded-md flex gap-2 lg:gap-4 w-full md:w-[48%]">
+              <SiGoogleclassroom className="w-4 h-4 lg:w-8 lg:h-8" />
+              <div className="flex flex-col lg:gap-2 gap-[2px]">
+                <h1 className="lg:text-xl text-base font-semibold">
                   {teacher._count.classes}
                 </h1>
-                <span className="text-sm text-gray-400">Classes</span>
+                <span className="lg:text-sm text-[10px] text-gray-400">Classes</span>
               </div>
             </div>
           </div>
@@ -128,13 +129,13 @@ export default async function SingleTeacherPage  ({
         </div>
       </div>
       {/* RIGHT */}
-      <div className="w-full xl:w-1/3 flex flex-col gap-4">
+      <div className="w-full xl:w-1/3 flex-col gap-4 hidden lg:block">
         <div className="bg-white p-4 rounded-md">
           <h1 className="text-xl font-semibold">Shortcuts</h1>
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
            <Link
               className="p-3 rounded-md bg-lamaSkyLight"
-              href={`/lists/classes?supervisorId=${teacher.id}`}
+              href={`/lists/classes?teachersId=${teacher.id}`}
             >
               Teacher&apos;s Classes
             </Link>
