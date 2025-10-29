@@ -114,7 +114,7 @@ body {
 }
 
 .react-calendar {
-  background-color: #eaf4ff; /* soft blue background */
+  background-color: #eaf4ff;
   border-radius: 12px;
   border: none;
   padding: 1rem;
@@ -181,4 +181,51 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* === REACT-BIG-CALENDAR RESPONSIVE STYLES === */
+.rbc-calendar {
+  font-size: 14px;
+}
+
+
+@media (max-width: 768px) {
+  .rbc-calendar {
+    font-size: 10px !important;
+  }
+
+  .rbc-time-gutter {
+    width: 40px !important;
+  }
+   .rbc-time-gutter .rbc-label {
+    font-size: 9px !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .rbc-event {
+    white-space: normal !important;
+    line-height: 1.2 !important;
+    padding: 2px 4px !important;
+    font-size: 10px !important;
+  }
+
+  .rbc-time-view {
+    overflow-x: auto !important;
+  }
+
+  .rbc-header {
+    font-size: 10px !important;
+    padding: 2px !important;
+  }
+
+  .rbc-timeslot-group {
+    min-height: 25px !important;
+  }
+
+  .rbc-event-content {
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+}
+
 

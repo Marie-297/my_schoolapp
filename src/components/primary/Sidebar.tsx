@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 import { AdminRoutes, AdminMobileRoutes } from "./SidebarRouter";
 import { RenderRoutes } from "./RenderRoute";
 // import ToggleLight from "./ToggleLight";
@@ -44,14 +45,15 @@ const SideBar = ({ onSelectPage }: SideBarProps) => {
               <AccordionTrigger>{group.title}</AccordionTrigger>
               <AccordionContent>
                 {group.items.map((item) => (
-                  <button
+                  <Link
                     key={item.title}
-                    onClick={() => handlePageSelect(item.url)}
+                    href={item.url}
+                    onClick={() => setIsOpen(false)} 
                     className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     <item.icon className="text-lg" />
                     {item.title}
-                  </button>
+                  </Link>
                 ))}
               </AccordionContent>
             </AccordionItem>

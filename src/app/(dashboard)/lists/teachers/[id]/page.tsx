@@ -92,10 +92,9 @@ export default async function SingleTeacherPage  ({
             </div>
           </div>
           <div className="lg:flex-1 lg:gap-4 lg:flex-wrap">
-           
             <div className="bg-white p-1 items-center rounded-md flex lg:gap-4 gap-2 md:w-[48%]">
               < HiDocumentReport className="w-4 h-4 lg:w-8 lg:h-8"/>
-              <div className="flex flex-col lg:gap-2 gap-[2px]">
+              <div className="flex flex-col lg:gap-2 gap-0">
                 <h1 className="lg:text-xl text-base font-semibold">90%</h1>
                 <span className="lg:text-sm text-[10px] text-gray-400">Attendance</span>
               </div>
@@ -123,8 +122,8 @@ export default async function SingleTeacherPage  ({
           </div>
         </div>
         {/* BOTTOM */}
-        <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
-          <h1>Teacher&apos;s Schedule</h1>
+        <div className="mt-4 bg-white rounded-md p-4 lg:h-[800px] h-[700px]">
+          <h1 className="mt-2 lg:mt-0">Teacher&apos;s Schedule</h1>
           <BigCalendarContainer type="teacherId" id={teacher.id} />
         </div>
       </div>

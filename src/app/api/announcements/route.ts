@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { clerkClient } from "@clerk/nextjs/server";
+import { supabaseServer } from "@/lib/supabaseServer";
 
 export async function GET(req: NextRequest) {
   try {
     const announcement = await prisma.announcement.findMany({
       select: {
+        id: true,
         title: true,
+        description: true,
+        classId: true,
+        parentId: true,
+        date: true,
       },
     });
     return NextResponse.json(announcement, { status: 200 });
@@ -40,6 +45,17 @@ export async function POST(req: NextRequest) {
         class: classId ? { connect: { id: classId } } : undefined, // Relate to class if provided
       },
     });
+    console.log("Using Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log("Using Service Role Key starts with:", process.env.SUPABASE_SERVICE_ROLE_KEY?.substring(0, 10));
+
+    await supabaseServer
+      .from("announcements")
+      .insert({
+        title: announcement.title,
+        description: announcement.description,
+        class_id: announcement.classId ?? null,
+        created_at: announcement.date ?? new Date().toISOString(),
+      });
     console.log("announcement created", announcement);
 
     return NextResponse.json({ announcement }, { status: 201 });

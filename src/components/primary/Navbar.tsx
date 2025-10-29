@@ -5,10 +5,13 @@ import { TfiAnnouncement } from "react-icons/tfi";
 import { IoIosNotifications } from "react-icons/io";
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import NotificationDropdown from "../others/NotificationDropdown";
+import { supabase } from "@/lib/supabaseClient";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { user, isLoaded } = useUser();
+  const [classIds, setClassIds] = useState<number[]>([]);
   const [role, setRole] = useState<string>("loading...");
   if (!isLoaded) return null;
 
@@ -27,7 +30,6 @@ const Navbar = () => {
   };
   fetchRole();
 }, []);
-
   return (
     <div className="flex items-center justify-between px-4 py-2 md:py-4 relative">
       {/* searchbar */}
@@ -47,14 +49,9 @@ const Navbar = () => {
             1
           </div>
         </div>
-        <div className="flex relative">
-          <div>
-            <IoIosNotifications size={30} />
-          </div>
-          <div className="absolute -top-3 -right-2 w-5 h-5 flex items-center justify-center bg-red-950 text-white rounded-full text-xs">
-            3
-          </div>
-        </div>
+        {isLoaded && user?.id && (
+          <NotificationDropdown userId={user.id} role={role.toUpperCase()} />
+        )}
         <div className="flex gap-2">
           <div>
             <SignedIn>
@@ -71,14 +68,10 @@ const Navbar = () => {
       </div>
       {/* Mobile toggle button */}
     <div className="md:hidden flex items-center">
-      {/* <button title="menu" onClick={() => setOpen(!open)} className="p-2 rounded-full hover:bg-gray-100">
-        <IoIosNotifications size={25} />
-      </button> */}
 
       {open && (
         <div className="absolute top-12 right-2 bg-white shadow-lg rounded-lg p-3 flex flex-col gap-3">
           <AiFillMessage size={20} />
-          <TfiAnnouncement size={20} />
           <IoIosNotifications size={20} />
         </div>
       )}

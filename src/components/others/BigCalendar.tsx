@@ -31,11 +31,23 @@ const BigCalendar = ({
     { title: string; allDay?: boolean }[]
   >([]); 
   const [holidayDates, setHolidayDates] = useState<string[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
 
   const handleOnChangeView = (selectedView: View) => {
     setView(selectedView);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      setView(mobile ? Views.DAY : Views.WORK_WEEK);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const hd = new Holidays("GH");
@@ -128,8 +140,7 @@ const BigCalendar = ({
           };
         }
         return {};
-      }}
-      
+      }} 
     />
   );
 };
