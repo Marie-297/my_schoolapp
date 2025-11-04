@@ -1,6 +1,6 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import prisma from "./prisma";
-import { ClassSchema, SubjectSchema, StudentSchema, TeacherSchema, ExamSchema } from "./formValidateSchema";
+import { ClassSchema, SubjectSchema, StudentSchema, TeacherSchema, ExamSchema, ParentSchema } from "./formValidateSchema";
 
 type currentState = { success: boolean; error: boolean };
 
@@ -429,6 +429,119 @@ export const deleteExams = async (
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
+    return { success: false, error: true };
+  }
+};
+
+export const createParent = async (
+  currentState: currentState,
+  data: ParentSchema
+) => {
+  console.log("Incoming Parent Data:", data);
+  try {
+    const clerk = await clerkClient();
+
+    // 1️⃣ Create parent account in Clerk
+    const clerkUser = await clerk.users.createUser({
+      username: data.username,
+      password: data.password,
+      firstName: data.name,
+      lastName: data.surname,
+      publicMetadata: { role: "parent" },
+    });
+
+    // 2️⃣ Create parent record in Prisma
+    await prisma.parent.create({
+      data: {
+        id: clerkUser.id,
+        username: data.username,
+        name: data.name,
+        surname: data.surname,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        password: data.password,
+        role: "parent",
+        // connect students if any
+        students: {
+          connect: data.studentIds?.map((studentId: string) => ({
+            id: studentId,
+          })),
+        },
+      },
+    });
+
+    return { success: true, error: false };
+  } catch (err) {
+    console.log("Failed to create parent:", err);
+    return { success: false, error: true };
+  }
+};
+
+export const updateParent = async (
+  currentState: currentState,
+  data: ParentSchema
+) => {
+  if (!data.id) {
+    return { success: false, error: true };
+  }
+
+  try {
+    const clerk = await clerkClient();
+
+    // 1️⃣ Update Clerk user account
+    await clerk.users.updateUser(data.id, {
+      username: data.username,
+      ...(data.password && { password: data.password }),
+      firstName: data.name,
+      lastName: data.surname,
+    });
+
+    // 2️⃣ Update Prisma parent record
+    await prisma.parent.update({
+      where: { id: data.id },
+      data: {
+        username: data.username,
+        name: data.name,
+        surname: data.surname,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        ...(data.password && { password: data.password }),
+        students: {
+          set: data.studentIds?.map((studentId: string) => ({
+            id: studentId,
+          })),
+        },
+      },
+    });
+
+    return { success: true, error: false };
+  } catch (err) {
+    console.log("Failed to update parent:", err);
+    return { success: false, error: true };
+  }
+};
+
+export const deleteParent = async (
+  currentState: currentState,
+  data: FormData
+) => {
+  const id = data.get("id") as string;
+  try {
+    const clerk = await clerkClient();
+
+    // 1️⃣ Delete from Clerk
+    await clerk.users.deleteUser(id);
+
+    // 2️⃣ Delete from Prisma
+    await prisma.parent.delete({
+      where: { id },
+    });
+
+    return { success: true, error: false };
+  } catch (err) {
+    console.log("Failed to delete parent:", err);
     return { success: false, error: true };
   }
 };

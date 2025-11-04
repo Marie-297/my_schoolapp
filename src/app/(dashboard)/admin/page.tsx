@@ -21,9 +21,12 @@ type StudentSexData = {
   boys: number;
   girls: number;
 };
-export default async function AdmindashboardPage({ 
+export default async function AdmindashboardPage({
   searchParams,
-}: { searchParams?: any }) {
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
   const students = await prisma.student.findMany({
     select: {
       sex: true,
@@ -104,8 +107,8 @@ export default async function AdmindashboardPage({
 console.log(formattedStudentSex);
 
 
-  const date =
-    typeof searchParams?.date === "string" ? searchParams.date : undefined;
+ const date =
+  typeof resolvedParams?.date === "string" ? resolvedParams.date : undefined;
   return (
     <>
       <div className="hidden md:block">
@@ -119,13 +122,13 @@ console.log(formattedStudentSex);
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-38">
             <DropdownMenuItem asChild>
-              <Link href="/lists/register/studentRegister">New Student</Link>
+              <Link href="/lists/register/registerStudent">New Student</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/lists/register/teacherRegister">New Teacher</Link>
+              <Link href="/lists/register/registerTeacher">New Teacher</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/lists/register/parentRegister">New Parent</Link>
+              <Link href="/lists/register/registerParent">New Parent</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

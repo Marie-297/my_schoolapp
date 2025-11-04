@@ -393,3 +393,50 @@ export const deleteEvent = async (currentState: currentState, data: FormData) =>
 
   return response.json();
 };
+
+export const createParent = async (data: any) => {
+  const response = await fetch("/api/parent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  console.log('Response Status:', response.status);
+  const responseBody = await response.text(); 
+  console.log('Response Body:', responseBody);
+
+  if (!response.ok) {
+    throw Error("Failed to create Parent");
+  }
+
+  return response.json();
+};
+
+export const updateParent = async (id: string, data: any) => {
+  const response = await fetch(`api/parent/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update Parent");
+  }
+
+  return response.json();
+};
+
+export const deleteParent = async (prevState: any, formData: FormData) => {
+  const id = formData.get("id");
+  console.log("Deleting Parent with ID:", id);
+  const response = await fetch(`/api/parent/${id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete Parent");
+  }
+
+  return response.json();
+};

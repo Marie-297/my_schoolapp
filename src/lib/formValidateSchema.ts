@@ -85,3 +85,17 @@ export const eventSchema = z.object({
   endDate: z.coerce.date({ message: "End time is required!" }),
 });
 export type EventSchema = z.infer<typeof eventSchema>;
+
+export const parentSchema = z.object({
+  id: z.string().optional(),
+  username: z.string().min(3, "Username is required"),
+  name: z.string().min(2, "Name is required"),
+  surname: z.string().min(2, "Surname is required"),
+  phone: z.string().min(10, "Phone number is required"),
+  email: z.string().email().optional(),
+  address: z.string().min(3, "Address is required"),
+  password: z.string().optional(),
+  studentIds: z.array(z.string()).optional(),
+});
+
+export type ParentSchema = z.infer<typeof parentSchema>;

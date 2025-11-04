@@ -19,12 +19,13 @@ import { GiTeamUpgrade } from "react-icons/gi";
 import { MdSettingsBackupRestore, MdPlayLesson } from "react-icons/md";
 
 export default async function SingleStudentPage ({
- searchParams,
-}: { searchParams?: any }) {
+ params,
+}: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const user = await currentUser();
   const metadata = user?.publicMetadata;
   const role = metadata?.Value; 
-  const studentId = searchParams?.id as string;
+  const studentId = id;
 
   const student:
     | (Student & {
